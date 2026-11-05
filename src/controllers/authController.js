@@ -333,6 +333,103 @@ exports.register = async (req, res, next) => {
   }
 };
 
+// @desc    Reset password by verifying registered email + phone (self-service)
+// @route   POST /api/auth/forgot-password
+// @access  Public
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const { email, phone, password, confirmPassword } = req.body;
+
+    if (!email || !phone || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide your registered email, phone number, and a new password'
+      });
+    }
+    if (!EMAIL_RE.test(normalizeEmail(email))) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address' });
+    }
+    if (!PHONE_RE.test(normalizePhone(phone))) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid 10-digit phone number' });
+    }
+    if (String(password).length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long'
+      });
+    }
+    if (typeof confirmPassword === 'string' && confirmPassword !== password) {
+      return res.status(400).json({ success: false, message: 'Passwords do not match' });
+    }
+
+    const cleanEmail = normalizeEmail(email);
+    const cleanPhone = normalizePhone(phone);
+
+    if (isDbReady()) {
+      const { data: user, error: findError } = await supabase
+        .from('users')
+        .select('id, is_active')
+        .eq('email', cleanEmail)
+        .eq('phone', cleanPhone)
+        .maybeSingle();
+      throwIfError(findError);
+
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: 'No account matches that email and phone number. Please use the details from your registered account.'
+        });
+      }
+      if (!user.is_active) {
+        return res.status(403).json({
+          success: false,
+          message: 'Your account has been deactivated. Please contact the administrator.'
+        });
+      }
+
+      const passwordHash = await bcrypt.hash(String(password), 10);
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ password_hash: passwordHash })
+        .eq('id', user.id);
+      throwIfError(updateError);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Password updated. Sign in with your new password.'
+      });
+    }
+
+    // Memory fallback mode
+    await initMemoryUsers();
+    const memoryUser = memoryUsers.find(
+      (u) =>
+        normalizeEmail(u.email) === cleanEmail &&
+        normalizePhone(u.phone) === cleanPhone
+    );
+    if (!memoryUser) {
+      return res.status(401).json({
+        success: false,
+        message: 'No account matches that email and phone number.'
+      });
+    }
+    if (!memoryUser.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account has been deactivated. Please contact the administrator.'
+      });
+    }
+
+    memoryUser.password = await bcrypt.hash(String(password), 10);
+    return res.status(200).json({
+      success: true,
+      message: 'Password updated. Sign in with your new password.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Login user with email/phone & password
 // @route   POST /api/auth/login
 // @access  Public

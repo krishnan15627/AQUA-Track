@@ -91,6 +91,13 @@ const api = {
     return data;
   },
 
+  async forgotPassword(details) {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify(details)
+    });
+  },
+
   async logout() {
     try {
       await this.request('/auth/logout', { method: 'POST' });

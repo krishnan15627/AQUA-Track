@@ -130,7 +130,7 @@
                 <input type="checkbox" id="rememberMe" checked>
                 <span>Remember me</span>
               </label>
-              <a href="#" onclick="alert('Please contact your business administrator to reset credentials.')" style="font-size: 0.85rem;">Forgot password?</a>
+              <a href="#" id="showForgotLink" style="font-size: 0.85rem;">Forgot password?</a>
             </div>
 
             <button type="submit" id="submitBtn" class="btn submit-btn">
@@ -257,6 +257,53 @@
 
             <button type="submit" id="signupBtn" class="btn submit-btn">
               <span>Create Account</span>
+            </button>
+          </form>
+
+          <!-- Self-service password reset: verify registered email + phone, then set a new password -->
+          <form id="passwordResetForm" autocomplete="on" style="display:none;">
+            <div class="form-group">
+              <label for="resetEmail">Registered Email Address</label>
+              <div class="input-icon-wrapper">
+                <input type="email" id="resetEmail" class="input-field" placeholder="name@example.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resetPhone">Registered Phone Number</label>
+              <div class="input-icon-wrapper">
+                <input type="tel" id="resetPhone" class="input-field" placeholder="10-digit phone number" maxlength="10" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resetPassword">New Password</label>
+              <div class="input-icon-wrapper">
+                <input type="password" id="resetPassword" class="input-field" placeholder="At least 8 characters" minlength="8" required>
+                <button type="button" id="toggleResetPassword" class="password-toggle-btn" aria-label="Show password">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resetConfirm">Confirm New Password</label>
+              <div class="input-icon-wrapper">
+                <input type="password" id="resetConfirm" class="input-field" placeholder="Repeat your new password" minlength="8" required>
+                <button type="button" id="toggleResetConfirm" class="password-toggle-btn" aria-label="Show password">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" id="resetBtn" class="btn submit-btn">
+              <span>Reset Password</span>
             </button>
           </form>
 

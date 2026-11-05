@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Elements
   const loginForm = document.getElementById('loginForm');
   const signupForm = document.getElementById('signupForm');
+  const resetForm = document.getElementById('passwordResetForm');
+  const resetBtn = document.getElementById('resetBtn');
   const identifierInput = document.getElementById('identifier');
   const passwordInput = document.getElementById('password');
   const togglePasswordBtn = document.getElementById('togglePassword');
@@ -64,36 +66,56 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggleSignupConfirm'),
     document.getElementById('signupConfirm')
   );
+  bindPasswordToggle(
+    document.getElementById('toggleResetPassword'),
+    document.getElementById('resetPassword')
+  );
+  bindPasswordToggle(
+    document.getElementById('toggleResetConfirm'),
+    document.getElementById('resetConfirm')
+  );
 
-  // Switch between Sign In / Create Account
+  // Switch between Sign In / Create Account / Reset Password
   function setMode(mode) {
     const isSignup = mode === 'signup';
+    const isReset = mode === 'reset';
     document.querySelectorAll('.auth-tab').forEach((tab) => {
       const active = tab.getAttribute('data-form') === mode;
       tab.classList.toggle('active', active);
       tab.setAttribute('aria-selected', active ? 'true' : 'false');
     });
 
-    if (loginForm) loginForm.style.display = isSignup ? 'none' : 'block';
+    if (loginForm) loginForm.style.display = mode === 'login' ? 'block' : 'none';
     if (signupForm) signupForm.style.display = isSignup ? 'block' : 'none';
-    if (authHeading) authHeading.textContent = isSignup ? 'Create Your Account' : 'Welcome Back!';
+    if (resetForm) resetForm.style.display = isReset ? 'block' : 'none';
+    if (authHeading) {
+      authHeading.textContent = isSignup
+        ? 'Create Your Account'
+        : isReset
+          ? 'Reset Your Password'
+          : 'Welcome Back!';
+    }
     if (authSubheading) {
       authSubheading.textContent = isSignup
         ? 'Sign up to order water and track your deliveries'
-        : 'Login to your account to continue';
+        : isReset
+          ? 'Confirm your registered email and phone number to set a new password'
+          : 'Login to your account to continue';
     }
     if (authFooter) {
       authFooter.innerHTML = isSignup
         ? 'Already have an account? <a href="#" id="showLoginLink">Sign In</a>'
-        : 'Don\'t have an account? <a href="#" id="showSignupLink">Sign Up</a>';
+        : isReset
+          ? 'Remembered your password? <a href="#" id="showLoginLink">Sign In</a>'
+          : 'Don\'t have an account? <a href="#" id="showSignupLink">Sign Up</a>';
       bindFooterLink();
     }
     document.querySelector('.auth-card')?.classList.toggle('signup-mode', isSignup);
 
     hideAlert();
-    const focusTarget = isSignup
-      ? document.getElementById('signupName')
-      : identifierInput;
+    let focusTarget = identifierInput;
+    if (isSignup) focusTarget = document.getElementById('signupName');
+    if (isReset) focusTarget = document.getElementById('resetEmail');
     if (focusTarget) focusTarget.focus();
   }
 
@@ -118,6 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
     tab.addEventListener('click', () => setMode(tab.getAttribute('data-form')));
   });
   bindFooterLink();
+
+  const showForgotLink = document.getElementById('showForgotLink');
+  if (showForgotLink) {
+    showForgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      setMode('reset');
+    });
+  }
 
   // Signup supports customers and delivery partners; address fields apply to customers only
   const roleSelect = document.getElementById('signupRole');
@@ -238,6 +268,64 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert(err.message || 'Could not create your account', 'danger');
         signupBtn.disabled = false;
         signupBtn.innerHTML = originalText;
+      }
+    });
+  }
+
+  // Handle Forgot Password Submission
+  if (resetForm) {
+    resetForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const email = document.getElementById('resetEmail').value.trim();
+      const phone = document.getElementById('resetPhone').value.trim();
+      const password = document.getElementById('resetPassword').value;
+      const confirm = document.getElementById('resetConfirm').value;
+
+      if (!email || !phone || !password) {
+        showAlert('Please fill in every field to reset your password', 'danger');
+        return;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        showAlert('Please enter a valid 10-digit phone number', 'danger');
+        document.getElementById('resetPhone').focus();
+        return;
+      }
+      if (password.length < 8) {
+        showAlert('Password must be at least 8 characters long', 'danger');
+        document.getElementById('resetPassword').focus();
+        return;
+      }
+      if (password !== confirm) {
+        showAlert('Passwords do not match', 'danger');
+        document.getElementById('resetConfirm').focus();
+        return;
+      }
+
+      resetBtn.disabled = true;
+      const originalText = resetBtn.innerHTML;
+      resetBtn.innerHTML = loadingMarkup('Resetting password...');
+
+      try {
+        const response = await api.forgotPassword({
+          email,
+          phone,
+          password,
+          confirmPassword: confirm
+        });
+        if (response.success) {
+          resetForm.reset();
+          setMode('login');
+          showAlert('Password updated! Sign in with your new password.', 'success');
+        } else {
+          showAlert(response.message || 'Password reset failed', 'danger');
+        }
+      } catch (err) {
+        showAlert(err.message || 'Could not reset your password', 'danger');
+      } finally {
+        resetBtn.disabled = false;
+        resetBtn.innerHTML = originalText;
       }
     });
   }
