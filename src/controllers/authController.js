@@ -49,9 +49,10 @@ const validateCustomerSignup = ({ name, email, phone, password }) => {
 // created by the business owner from the dashboard, never self-registered.
 const resolveSignupRole = (role) => {
   if (!role || role === 'customer') return { role: 'customer', error: null };
+  if (role === 'staff') return { role: 'staff', error: null };
   return {
     role: null,
-    error: 'Self sign-up is for customers only. Delivery partner and owner accounts are created by the business owner.'
+    error: 'Self sign-up is for customers and delivery partners only. Owner accounts are created by the business.'
   };
 };
 
@@ -99,7 +100,7 @@ const sendTokenResponse = (user, statusCode, res, customer) => {
     });
 };
 
-// @desc    Create a customer account (self signup)
+// @desc    Create a customer or delivery partner account (self signup)
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = async (req, res, next) => {
@@ -133,7 +134,7 @@ exports.register = async (req, res, next) => {
     const cleanArea = area ? String(area).trim() : '';
     const quantity = Math.max(1, parseInt(regularQuantity, 10) || 1);
 
-    if (!cleanAddress || !cleanArea) {
+    if (role === 'customer' && (!cleanAddress || !cleanArea)) {
       return res.status(400).json({
         success: false,
         message: 'Please provide your delivery address and delivery area'
@@ -182,6 +183,23 @@ exports.register = async (req, res, next) => {
       }
 
       const passwordHash = await bcrypt.hash(String(password), 10);
+
+      if (role === 'staff') {
+        const { data: staffRow, error: staffError } = await supabase
+          .from('users')
+          .insert({
+            name: cleanName,
+            email: cleanEmail,
+            phone: cleanPhone,
+            password_hash: passwordHash,
+            role: 'staff',
+            is_active: true
+          })
+          .select()
+          .single();
+        throwIfError(staffError);
+        return sendTokenResponse(mapRow(staffRow), 201, res, null);
+      }
 
       const customerId = await nextCustomerCode();
       const { data: customerRow, error: customerError } = await supabase
@@ -237,11 +255,13 @@ exports.register = async (req, res, next) => {
       });
     }
 
-    const duplicateCustomer = memState.customers.find(
-      (c) =>
-        normalizeEmail(c.email) === cleanEmail ||
-        normalizePhone(c.phone) === cleanPhone
-    );
+    const duplicateCustomer =
+      role === 'customer' &&
+      memState.customers.find(
+        (c) =>
+          normalizeEmail(c.email) === cleanEmail ||
+          normalizePhone(c.phone) === cleanPhone
+      );
     if (duplicateCustomer) {
       return res.status(400).json({
         success: false,
@@ -251,6 +271,22 @@ exports.register = async (req, res, next) => {
     }
 
     const hash = await bcrypt.hash(String(password), 10);
+
+    if (role === 'staff') {
+      const staffUser = {
+        _id: crypto.randomUUID(),
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        password: hash,
+        role: 'staff',
+        customerRef: null,
+        isActive: true,
+        lastLogin: new Date()
+      };
+      memoryUsers.push(staffUser);
+      return sendTokenResponse(staffUser, 201, res, null);
+    }
 
     const customerId = await nextCustomerCode();
     const newCustomer = {

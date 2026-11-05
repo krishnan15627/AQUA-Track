@@ -138,8 +138,18 @@
             </button>
           </form>
 
-          <!-- Self-service signup: customers only. Owner creates driver accounts from the Driver Portal. -->
+          <!-- Self-service signup: customers and delivery partners. Owner accounts are created by the business. -->
           <form id="signupForm" autocomplete="on" style="display:none;">
+            <div class="form-group">
+              <label for="signupRole">Account Type</label>
+              <div class="input-icon-wrapper">
+                <select id="signupRole" class="input-field" style="width: 100%;">
+                  <option value="customer">Customer — I receive water deliveries</option>
+                  <option value="staff">Delivery Partner — I deliver water cans</option>
+                </select>
+              </div>
+            </div>
+
             <div class="form-group">
               <label for="signupName">Full Name</label>
               <div class="input-icon-wrapper">
@@ -178,6 +188,7 @@
               </div>
             </div>
 
+            <div id="customerOnlyFields">
             <div class="form-group">
               <label for="signupAddress">Delivery Address</label>
               <div class="input-icon-wrapper">
@@ -203,6 +214,7 @@
                 </span>
                 <input type="text" id="signupArea" class="input-field" placeholder="e.g. Anna Nagar" required>
               </div>
+            </div>
             </div>
 
             <div class="form-group">

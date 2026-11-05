@@ -119,9 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   bindFooterLink();
 
-  // Signup is customer-only; address fields are always required
+  // Signup supports customers and delivery partners; address fields apply to customers only
+  const roleSelect = document.getElementById('signupRole');
+  const customerOnlyFields = document.getElementById('customerOnlyFields');
   const addressInput = document.getElementById('signupAddress');
   const areaInput = document.getElementById('signupArea');
+
+  function syncSignupRole() {
+    const isStaff = roleSelect.value === 'staff';
+    if (customerOnlyFields) customerOnlyFields.style.display = isStaff ? 'none' : '';
+    if (addressInput) addressInput.required = !isStaff;
+    if (areaInput) areaInput.required = !isStaff;
+  }
+  if (roleSelect) roleSelect.addEventListener('change', syncSignupRole);
 
   // Handle Login Submission
   if (loginForm) {
@@ -168,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle Customer Signup Submission
+  // Handle Signup Submission (customer or delivery partner)
   if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -181,8 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const area = areaInput.value.trim();
       const password = document.getElementById('signupPassword').value;
       const confirm = document.getElementById('signupConfirm').value;
+      const role = roleSelect ? roleSelect.value : 'customer';
+      const isCustomer = role === 'customer';
 
-      if (!name || !email || !phone || !address || !area || !password) {
+      if (!name || !email || !phone || !password || (isCustomer && (!address || !area))) {
         showAlert('Please fill in every field to create your account', 'danger');
         return;
       }
@@ -207,7 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
       signupBtn.innerHTML = loadingMarkup('Creating account...');
 
       try {
-        const response = await api.register({ name, email, phone, address, area, password });
+        const response = await api.register(
+          isCustomer
+            ? { name, email, phone, address, area, password, role }
+            : { name, email, phone, password, role }
+        );
         if (response.success) {
           showAlert('Account created! Redirecting to your portal...', 'success');
           setTimeout(() => {
