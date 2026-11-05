@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaTrack — Smart Water Can Management System</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C12 9 7 14 7 19a9 9 0 0 0 18 0c0-5-5-10-9-16z' fill='%232563eb'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Fixed Left Sidebar (Cards 2-8) -->
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-drop">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </div>
+        <div class="brand-title-wrap">
+          <h1>AquaTrack</h1>
+          <span>Smart Water Can System</span>
+        </div>
+      </div>
+
+      <ul class="sidebar-nav">
+        <li>
+          <button class="nav-btn active" data-view="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="customers">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Customers</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="orders">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Orders</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="delivery">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <span>Delivery</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="inventory">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="16.5" y1="9.4" x2="7.55" y2="4.24"></line>
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.29 7 12 12 20.71 7"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>Inventory</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="payments">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            <span>Payments</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="reports">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Reports</span>
+          </button>
+        </li>
+
+        <li style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.12);">
+          <div style="font-size: 0.7rem; text-transform: uppercase; color: #93c5fd; padding-left: 16px; margin-bottom: 6px; font-weight: 700;">
+            Portals
+          </div>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="staff-portal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="7" r="4"></circle>
+              <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path>
+            </svg>
+            <span>Driver Portal</span>
+          </button>
+        </li>
+        <li>
+          <button class="nav-btn" data-view="customer-portal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Customer Portal</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- User Profile at bottom -->
+      <div class="sidebar-footer">
+        <div class="sidebar-avatar" id="userAvatar">A</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="userName">Admin Owner</div>
+          <div class="sidebar-user-role" id="userRole">Owner</div>
+        </div>
+        <button class="action-icon-btn" id="logoutBtn" title="Logout" style="background:transparent; border:none; color:#cbd5e1;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <h2 class="page-title" id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="top-actions">
+          <div class="date-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span class="current-date-text">Today</span>
+          </div>
+
+          <button class="btn btn-secondary" onclick="api.logout()">
+            Log Out
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: MAIN OWNER DASHBOARD (Card 2) -->
+      <section class="page-view active" id="view-dashboard">
+        <!-- 4 Stats Cards -->
+        <div class="stats-grid">
+          <!-- Total Orders -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Total Orders</span>
+              <div class="stat-icon" style="background:#eff6ff; color:#2563eb;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="dashTotalOrders">—</div>
+          </div>
+
+          <!-- Delivered -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Delivered</span>
+              <div class="stat-icon" style="background:#dcfce7; color:#16a34a;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="dashDelivered">—</div>
+          </div>
+
+          <!-- Pending Delivery -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Pending Delivery</span>
+              <div class="stat-icon" style="background:#ffedd5; color:#ea580c;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="dashPending">—</div>
+          </div>
+
+          <!-- Empty Cans Pending -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Empty Cans Pending</span>
+              <div class="stat-icon" style="background:#e0f2fe; color:#0284c7;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-value" id="dashEmptyPending">—</div>
+          </div>
+        </div>
+
+        <!-- 2 Column: Today's Deliveries Chart & Quick Actions -->
+        <div class="dashboard-grid">
+          <!-- Deliveries Chart -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <h3>Today's Deliveries</h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="deliveryChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="quick-actions-card">
+            <h3>Quick Actions</h3>
+            <div class="action-btn-list">
+              <button class="action-btn" onclick="openAddCustomerModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                <span>Add Customer</span>
+              </button>
+              <button class="action-btn" onclick="openNewOrderModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <span>Create Order</span>
+              </button>
+              <button class="action-btn" onclick="switchView('delivery')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span>View Delivery List</span>
+              </button>
+              <button class="action-btn" onclick="switchView('inventory')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="16.5" y1="9.4" x2="7.55" y2="4.24"></line>
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span>Check Stock</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div class="table-card">
+          <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">Recent Orders</h3>
+            <button class="btn btn-secondary" style="font-size: 0.85rem;" onclick="switchView('orders')">View All</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date & Time</th>
+                <th>Cans</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 2: CUSTOMERS (Card 3) -->
+      <section class="page-view" id="view-customers">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="customerSearchInput" class="search-input" placeholder="Search by name, phone or area..." oninput="loadCustomersData()">
+            </div>
+
+            <div class="filter-tabs">
+              <div class="tab-pill customer-tab active" data-status="All">All</div>
+              <div class="tab-pill customer-tab" data-status="Active">Active</div>
+              <div class="tab-pill customer-tab" data-status="Inactive">Inactive</div>
+            </div>
+
+            <button class="btn btn-primary" onclick="openAddCustomerModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>+ Add Customer</span>
+            </button>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Area</th>
+                <th>Pending Cans</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 3: ORDERS (Card 4) -->
+      <section class="page-view" id="view-orders">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div class="filter-tabs">
+              <div class="tab-pill order-tab active" data-status="All">All</div>
+              <div class="tab-pill order-tab" data-status="Scheduled">Scheduled</div>
+              <div class="tab-pill order-tab" data-status="Out for Delivery">Out for Delivery</div>
+              <div class="tab-pill order-tab" data-status="Delivered">Delivered</div>
+              <div class="tab-pill order-tab" data-status="Missed">Missed</div>
+            </div>
+
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="orderSearchInput" class="search-input" placeholder="Search by customer name or ID..." oninput="loadOrdersData()">
+            </div>
+
+            <button class="btn btn-primary" onclick="openNewOrderModal()">
+              <span>+ New Order</span>
+            </button>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Date & Time</th>
+                <th>Cans</th>
+                <th>Status</th>
+                <th>Delivery Person</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 4: DELIVERY MANAGEMENT (Card 5) -->
+      <section class="page-view" id="view-delivery">
+        <div class="table-card">
+          <div class="table-toolbar">
+            <div style="font-weight: 700; font-size: 1.15rem; color: #0f172a;">Delivery List</div>
+
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="deliverySearchInput" class="search-input" placeholder="Search by customer or area..." oninput="loadDeliveryData()">
+            </div>
+
+            <div class="date-pill">
+              <span class="current-date-text">Today</span>
+            </div>
+
+            <button class="btn btn-primary" onclick="openNewOrderModal()">
+              <span>+ Assign Delivery</span>
+            </button>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Area</th>
+                <th>Cans</th>
+                <th>Status</th>
+                <th>Delivery Person</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="deliveryTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 5: INVENTORY / STOCK (Card 6) -->
+      <section class="page-view" id="view-inventory">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="font-size: 1.25rem; font-weight: 700;">Stock Overview</h3>
+          <button class="btn btn-primary" onclick="openAddStockModal()">+ Add Stock</button>
+        </div>
+
+        <!-- 4 Stock Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Full Cans (Ready)</div>
+            <div class="stat-value" id="invFullCans" style="color: #2563eb;">—</div>
+            <span class="badge badge-good" style="width: fit-content;">Ready for dispatch</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Empty Cans (Refill)</div>
+            <div class="stat-value" id="invEmptyCans" style="color: #ea580c;">—</div>
+            <span class="badge badge-refill-needed" style="width: fit-content;">Waiting for refill</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">With Delivery Staff</div>
+            <div class="stat-value" id="invStaffCans" style="color: #16a34a;">—</div>
+            <span class="badge badge-in-transit" style="width: fit-content;">In transit</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Damaged / Unavailable</div>
+            <div class="stat-value" id="invDamagedCans" style="color: #dc2626;">—</div>
+            <span class="badge badge-check" style="width: fit-content;">Check required</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <!-- Stock Details Table -->
+          <div class="table-card">
+            <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-light); font-weight: 700;">
+              Stock Details
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="stockTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Total Cans Big Bottle Widget -->
+          <div class="chart-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <div style="width: 80px; height: 120px; background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%); border-radius: 14px 14px 10px 10px; position: relative; margin-bottom: 16px; border: 2px solid white; box-shadow: 0 10px 20px rgba(37,99,235,0.25);">
+              <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 30px; height: 10px; background: white; border-radius: 4px;"></div>
+            </div>
+            <div style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Total Business Cans</div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: #0f172a;" id="invTotalCans">—</div>
+            <div style="font-size: 0.8rem; color: #16a34a; font-weight: 600; margin-top: 4px;">✓ Stock Accounted</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: PAYMENTS (Card 7) -->
+      <section class="page-view" id="view-payments">
+        <div class="customer-pay-banner" id="customerPayBanner" style="display: none;">
+          <div>
+            <div class="customer-pay-banner-label">Outstanding balance</div>
+            <div class="customer-pay-banner-value" id="custPayBannerDue">₹ 0</div>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="openCustomerPaymentModal()">Pay Now</button>
+        </div>
+
+        <div class="table-card" style="margin-bottom: 24px;">
+          <div class="table-toolbar">
+            <div class="filter-tabs">
+              <div class="tab-pill payment-tab active" data-status="All">All</div>
+              <div class="tab-pill payment-tab" data-status="Paid">Paid</div>
+              <div class="tab-pill payment-tab" data-status="Pending">Pending</div>
+            </div>
+
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="paymentSearchInput" class="search-input" placeholder="Search by customer name or ID..." oninput="loadPaymentsData()">
+            </div>
+
+            <div class="date-pill">
+              <span>All time</span>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Total Due</th>
+                <th>Paid</th>
+                <th>Remaining</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- 3 Summary Totals at Bottom -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <div class="stat-card" style="background:#f0fdf4; border-color:#bbf7d0;">
+            <div style="font-size:0.85rem; color:#15803d; font-weight:600;">Total Collected</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#15803d; margin-top:4px;" id="payTotalCollected">—</div>
+          </div>
+          <div class="stat-card" style="background:#fff7ed; border-color:#fed7aa;">
+            <div style="font-size:0.85rem; color:#c2410c; font-weight:600;">Total Pending</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#c2410c; margin-top:4px;" id="payTotalPending">—</div>
+          </div>
+          <div class="stat-card" style="background:#eff6ff; border-color:#bfdbfe;" id="payTotalCustomersCard">
+            <div style="font-size:0.85rem; color:#1d4ed8; font-weight:600;">Total Customers</div>
+            <div style="font-size:1.8rem; font-weight:800; color:#1d4ed8; margin-top:4px;" id="payTotalCustomers">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 7: REPORTS (Card 8) -->
+      <section class="page-view" id="view-reports">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="date-pill">
+            <span>All time</span>
+          </div>
+          <button class="btn btn-primary" onclick="exportReportsCSV()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Export CSV</span>
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Total Orders</div>
+            <div class="stat-value" id="repTotalOrders">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Total Sales</div>
+            <div class="stat-value" id="repTotalSales">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Total Payments</div>
+            <div class="stat-value" id="repTotalPayments">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Outstanding</div>
+            <div class="stat-value" id="repOutstanding" style="color: #dc2626;">—</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Sales Trend Line Chart -->
+          <div class="chart-card">
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Sales Trend</h3>
+            <div class="chart-container">
+              <canvas id="salesTrendChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Payment Status Doughnut Chart -->
+          <div class="chart-card">
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Payment Status</h3>
+            <div class="chart-container" style="height: 200px;">
+              <canvas id="paymentDonutChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 8: DRIVER PORTAL (Card 10 & 11) -->
+      <section class="page-view" id="view-staff-portal">
+        <div class="portal-container">
+          <div class="portal-welcome-card">
+            <div style="font-size: 0.85rem; opacity: 0.85;">Welcome Back</div>
+            <h2 style="font-size: 1.45rem; font-weight: 800;" id="staffPortalName">—</h2>
+            <div style="margin-top: 10px; font-size: 0.9rem; background: rgba(255,255,255,0.18); padding: 8px 14px; border-radius: 8px; width: fit-content;" id="staffPortalCount">
+              🚚 Active Deliveries: —
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a;">Today's Assigned Route</h3>
+            <button class="btn btn-primary" id="addDriverBtn" onclick="openAddDriverModal()" style="font-size: 0.85rem;">+ Add Driver</button>
+          </div>
+          <div id="staffDeliveriesList"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 9: CUSTOMER PORTAL (Card 9) -->
+      <section class="page-view" id="view-customer-portal">
+        <div class="portal-container">
+          <div class="portal-welcome-card" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+            <div style="font-size: 0.85rem; opacity: 0.85;">Customer Portal</div>
+            <h2 style="font-size: 1.45rem; font-weight: 800;" id="custPortalName">—</h2>
+            <div style="font-size: 0.85rem; opacity: 0.9;" id="custPortalId">Customer ID: —</div>
+
+            <div style="margin-top: 16px; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px;">
+              <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Next Scheduled Delivery</div>
+              <div style="font-size: 1.1rem; font-weight: 700; margin-top: 2px;" id="custPortalNext">—</div>
+            </div>
+          </div>
+
+          <div class="portal-grid-actions">
+            <div class="portal-action-box" onclick="openNewOrderModal()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <div style="font-weight: 700; font-size: 0.95rem;">Place Order</div>
+              <div style="font-size: 0.8rem; color: #64748b;">Order water cans</div>
+            </div>
+
+            <div class="portal-action-box" onclick="switchView('orders')">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <div style="font-weight: 700; font-size: 0.95rem;">My Orders</div>
+              <div style="font-size: 0.8rem; color: #64748b;">Track deliveries</div>
+            </div>
+
+            <div class="portal-action-box">
+              <div style="font-size: 1.5rem; font-weight: 800; color: #ea580c;" id="custPortalUnreturned">—</div>
+              <div style="font-weight: 700; font-size: 0.95rem; margin-top: 4px;">Empty Cans</div>
+              <div style="font-size: 0.8rem; color: #64748b;">Return status</div>
+            </div>
+
+            <div class="portal-action-box" style="cursor: default;">
+              <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;" id="custPortalDue">—</div>
+              <div style="font-weight: 700; font-size: 0.95rem; margin-top: 4px;">Payments</div>
+              <div style="font-size: 0.8rem; color: #64748b;">Due balance</div>
+              <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <button type="button" class="btn btn-primary" style="flex: 1; padding: 8px 10px; font-size: 0.82rem;" onclick="openCustomerPaymentModal()">Pay Now</button>
+                <button type="button" class="btn btn-secondary" style="padding: 8px 10px; font-size: 0.82rem;" onclick="switchView('payments')">History</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="nearby-card">
+            <div class="nearby-header">
+              <div>
+                <h3>Nearby Water Can Centers</h3>
+                <p>Pickup points and refill hubs in your area.</p>
+              </div>
+              <button type="button" class="btn btn-secondary nearby-locate-btn" id="nearbyLocateBtn" onclick="locateNearbyCenters()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+                <span>Use my location</span>
+              </button>
+            </div>
+
+            <div class="search-input-wrap nearby-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="nearbySearchInput" class="search-input" placeholder="Search by area or center name..." oninput="renderNearbyCenters()">
+            </div>
+
+            <div id="nearbyLocationNotice" class="nearby-notice"></div>
+            <div id="nearbyCentersList" class="nearby-list"></div>
+          </div>
+
+          <!-- GOOGLE MAPS: NEARBY AQUA SHOPS -->
+          <div class="nearby-card">
+            <div class="nearby-header">
+              <div>
+                <h3>Aqua Shops Near You</h3>
+                <p>See pickup points around your exact location.</p>
+              </div>
+              <button type="button" class="btn btn-secondary nearby-locate-btn" id="mapLocateBtn" onclick="locateForMap()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+                <span>Use my exact location</span>
+              </button>
+            </div>
+
+            <div id="aquaMapNotice" class="nearby-notice" style="display:none;"></div>
+            <div id="aquaMap" class="aqua-map"></div>
+            <div id="aquaMapFallback" class="aqua-map-fallback" style="display:none;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                <line x1="8" y1="2" x2="8" y2="18"></line>
+                <line x1="16" y1="6" x2="16" y2="22"></line>
+              </svg>
+              <p>Live map is not enabled yet.</p>
+              <p class="aqua-map-fallback-hint">Ask the business owner to add a Google Maps API key (<code>MAPS_BROWSER_KEY</code> in the server <code>.env</code>). Until then, use the shop list above — distances and directions still work.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL: ADD CUSTOMER -->
+  <div class="modal-overlay" id="addCustomerModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="customerModalTitle">Add New Customer</h3>
+        <button class="action-icon-btn" onclick="closeModal('addCustomerModal')">✕</button>
+      </div>
+      <form id="addCustomerForm">
+        <input type="hidden" id="custEditId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Customer Name *</label>
+            <input type="text" id="custName" class="input-field" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="text" id="custPhone" class="input-field" placeholder="10-digit phone" required>
+          </div>
+          <div class="form-group">
+            <label>Delivery Area *</label>
+            <input type="text" id="custArea" class="input-field" placeholder="e.g. Anna Nagar, T. Nagar" required>
+          </div>
+          <div class="form-group">
+            <label>Delivery Address *</label>
+            <input type="text" id="custAddress" class="input-field" placeholder="Door No, Street" required>
+          </div>
+          <div class="form-group">
+            <label>Delivery Instructions</label>
+            <input type="text" id="custInstructions" class="input-field" placeholder="e.g. Leave at door">
+          </div>
+          <div class="form-group">
+            <label>Regular Delivery Quantity (Cans)</label>
+            <input type="number" id="custQty" class="input-field" value="2" min="1">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addCustomerModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="customerModalSubmit">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE ORDER -->
+  <div class="modal-overlay" id="newOrderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Create New Order</h3>
+        <button class="action-icon-btn" onclick="closeModal('newOrderModal')">✕</button>
+      </div>
+      <form id="newOrderForm">
+        <div class="modal-body">
+          <div class="form-group" id="orderCustomerGroup">
+            <label>Customer *</label>
+            <select id="orderCustomerId" class="input-field" required></select>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Full Cans Ordered *</label>
+              <input type="number" id="orderCans" class="input-field" value="2" min="1" required>
+            </div>
+            <div class="form-group">
+              <label>Expected Empty Return</label>
+              <input type="number" id="orderExpectedEmpty" class="input-field" value="2" min="0">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Delivery Date</label>
+              <input type="text" id="orderDate" class="input-field">
+            </div>
+            <div class="form-group">
+              <label>Preferred Time Slot</label>
+              <select id="orderTime" class="input-field">
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="orderStaffGroup">
+            <label>Assign Delivery Person</label>
+            <select id="orderStaff" class="input-field">
+              <option value="Unassigned">Unassigned</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" id="orderNotes" class="input-field" placeholder="Optional delivery instructions">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('newOrderModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: COMPLETE DELIVERY & CAN TRACKING -->
+  <div class="modal-overlay" id="completeDeliveryModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Complete Delivery & Can Return</h3>
+        <button class="action-icon-btn" onclick="closeModal('completeDeliveryModal')">✕</button>
+      </div>
+      <form id="completeDeliveryForm">
+        <input type="hidden" id="completeDelId">
+        <div class="modal-body">
+          <div style="background:#eff6ff; padding:12px; border-radius:8px; margin-bottom:16px; font-size:0.875rem; color:#1d4ed8;">
+            Formula applied: <strong>New Balance = Previous + Delivered − Returned</strong>
+          </div>
+          <div class="form-group">
+            <label>Full Cans Delivered *</label>
+            <input type="number" id="actualDeliveredCans" class="input-field" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>Empty Cans Collected *</label>
+            <input type="number" id="collectedEmptyCans" class="input-field" min="0" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('completeDeliveryModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Complete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADJUST STOCK -->
+  <div class="modal-overlay" id="adjustStockModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Adjust Stock Inventory</h3>
+        <button class="action-icon-btn" onclick="closeModal('adjustStockModal')">✕</button>
+      </div>
+      <form id="adjustStockForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="stockCategory" class="input-field">
+              <option value="full">Full Cans (Ready)</option>
+              <option value="empty">Empty Cans (Refill)</option>
+              <option value="staff">With Delivery Staff</option>
+              <option value="damaged">Damaged / Unavailable</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Action</label>
+            <select id="stockAction" class="input-field">
+              <option value="add">Add Stock (+)</option>
+              <option value="remove">Remove Stock (-)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" id="stockQty" class="input-field" value="10" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" id="stockNotes" class="input-field" placeholder="e.g. Received new shipment">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('adjustStockModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Stock</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: RECORD PAYMENT -->
+  <div class="modal-overlay" id="recordPaymentModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Record Customer Payment</h3>
+        <button class="action-icon-btn" onclick="closeModal('recordPaymentModal')">✕</button>
+      </div>
+      <form id="recordPaymentForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Customer ID</label>
+            <input type="text" id="payCustomerId" class="input-field" readonly>
+          </div>
+          <div class="form-group">
+            <label>Amount (₹) *</label>
+            <input type="number" id="payAmount" class="input-field" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="payMethod" class="input-field">
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('recordPaymentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ASSIGN DELIVERY STAFF -->
+  <div class="modal-overlay" id="assignStaffModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Assign Delivery Person</h3>
+        <button class="action-icon-btn" onclick="closeModal('assignStaffModal')">✕</button>
+      </div>
+      <form id="assignStaffForm">
+        <input type="hidden" id="assignDeliveryId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Delivery Person</label>
+            <select id="assignStaffSelect" class="input-field" required></select>
+          </div>
+          <div id="assignStaffHint" class="assign-staff-empty" style="display:none;">
+            No drivers yet? Add one from the Driver Portal.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('assignStaffModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD DELIVERY DRIVER -->
+  <div class="modal-overlay" id="addDriverModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add Delivery Driver</h3>
+        <button class="action-icon-btn" onclick="closeModal('addDriverModal')">✕</button>
+      </div>
+      <form id="addDriverForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Driver Name *</label>
+            <input type="text" id="driverName" class="input-field" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="driverEmail" class="input-field" placeholder="driver@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="driverPhone" class="input-field" placeholder="10-digit phone number" maxlength="10" required>
+          </div>
+          <div class="form-group">
+            <label>Temporary Password *</label>
+            <input type="password" id="driverPassword" class="input-field" placeholder="At least 8 characters" minlength="8" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addDriverModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Driver</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CUSTOMER PAY BILL (FRONTEND PREVIEW) -->
+  <div class="modal-overlay" id="customerPayModal">
+    <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3>Pay Bill</h3>
+        <button class="action-icon-btn" onclick="closeModal('customerPayModal')">✕</button>
+      </div>
+      <form id="customerPayForm">
+        <div class="modal-body">
+          <div class="pay-summary">
+            <span>Amount due</span>
+            <strong id="custPayDue">₹ 0</strong>
+          </div>
+
+          <div class="form-group">
+            <label for="custPayAmount">Amount to pay (₹) *</label>
+            <input type="number" id="custPayAmount" class="input-field" min="1" step="1" required>
+          </div>
+
+          <div class="form-group">
+            <label>Payment method</label>
+            <div class="pay-methods">
+              <label class="pay-method">
+                <input type="radio" name="custPayMethod" value="UPI" checked>
+                <span>UPI</span>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="custPayMethod" value="Card">
+                <span>Card</span>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="custPayMethod" value="Net Banking">
+                <span>Net Banking</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="pay-preview-note">
+            Preview only — no real money is charged and your balance is not changed.
+            A secure payment gateway will be connected in the next step.
+          </div>
+
+          <div id="custPayStatus" class="alert-box" style="margin-bottom: 0;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('customerPayModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
